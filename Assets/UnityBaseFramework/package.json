@@ -1,0 +1,15 @@
+{
+  "name": "com.cofdream.unitybaseframework",
+  "version": "0.0.1",
+  "displayName": "BaseFramework",
+  "description": "",
+  "unity": "2019.1",
+  "dependencies": {
+    "com.cofdream.toolkit": "https://github.com/cofdream/DATools.git#upm"
+  },
+  "author": {
+    "name": "Cofdream",
+    "email": "cofdream@sina.com",
+    "url": "https://github.com/cofdream/UnityBaseFramework.git"
+  }
+}

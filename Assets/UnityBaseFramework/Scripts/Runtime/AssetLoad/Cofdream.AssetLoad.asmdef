@@ -1,0 +1,14 @@
+{
+    "name": "Cofdream.AssetLoad",
+    "rootNamespace": "Cofdream.AssetLoad",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

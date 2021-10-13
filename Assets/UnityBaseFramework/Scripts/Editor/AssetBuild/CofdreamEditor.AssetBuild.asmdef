@@ -1,0 +1,10 @@
+{
+    "name": "CofdreamEditor.AssetBuild",
+    "rootNamespace": "CofdreamEditor.AssetBuild",
+    "references": [
+        "GUID:cf02a780034634d48a7a51a83715d82c"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ]
+}
