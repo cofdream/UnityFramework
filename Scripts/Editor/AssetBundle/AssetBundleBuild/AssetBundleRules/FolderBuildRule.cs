@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace CofdreamEditor.AssetBuild
+namespace CofdreamEditor.AssetBundle
 {
     public sealed class FolderBuildRule : ScriptableObject, IBuildRule
     {

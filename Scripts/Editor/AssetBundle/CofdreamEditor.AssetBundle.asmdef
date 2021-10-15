@@ -1,8 +1,12 @@
 {
-    "name": "Cofdream.AssetBuild",
-    "rootNamespace": "Cofdream.AssetBuild",
-    "references": [],
-    "includePlatforms": [],
+    "name": "CofdreamEditor.AssetBundle",
+    "rootNamespace": "CofdreamEditor.AssetBundle",
+    "references": [
+        "GUID:ec58530054224fa4f926ca0d01675a23"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

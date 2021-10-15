@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-namespace CofdreamEditor.AssetBuild
+namespace CofdreamEditor.AssetBundle
 {
     public static class BuildRuleUtil
     {

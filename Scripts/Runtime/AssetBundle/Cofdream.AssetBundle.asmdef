@@ -1,6 +1,6 @@
 {
-    "name": "Cofdream",
-    "rootNamespace": "Cofdream",
+    "name": "Cofdream.AssetBundle",
+    "rootNamespace": "Cofdream.AssetBundle",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

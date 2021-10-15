@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-#if UNITY_EDITOR
 namespace Cofdream.AssetLoad
 {
-    public class EditorAssetLoad
+#if UNITY_EDITOR
+    public class EditorAssetLoad : IAssetLoad
     {
+        public static bool LocalLoadModel;
+
         public const bool DefaultValue = true;
         public const string LOCAL_LOAD_MODEL = "EditorAssetLoad.localLoadModel";
         private const string MENI_ITEM_NAME = "Switch Editor Asset Load Model/LocalLoadModel";
-
-        public static bool LocalLoadModel;
 
         static EditorAssetLoad()
         {
@@ -121,6 +121,11 @@ namespace Cofdream.AssetLoad
             }
             return asset;
         }
+
+        public void UnAllLoad()
+        {
+            Put(this);
+        }
     }
-}
 #endif
+}

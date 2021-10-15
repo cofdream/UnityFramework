@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Cofdream.AssetLoad
 {
-    public class AssetBundleLoad
+    public class AssetBundleLoad: IAssetLoad
     {
         private uint referenceCount;
         private LoadState loadState;
@@ -171,6 +171,9 @@ namespace Cofdream.AssetLoad
             }
             return asset;
         }
-
+        public void UnAllLoad()
+        {
+            Put(this);
+        }
     }
 }
