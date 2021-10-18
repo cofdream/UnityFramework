@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Cofdream
 {
@@ -12,57 +13,66 @@ namespace Cofdream
 
         private string localAssetBundleVersionPath;
 
+        public Text longText;
+
         private void Awake()
         {
-            localAssetBundleVersionPath = Application.persistentDataPath + "/LocalAssetBundleVersion.json";
+            localAssetBundleVersionPath = @"C:\Users\v_cqqcchen\Desktop\Test/LocalAssetBundleVersion.json";
 
             AssetBundleBuildData assetBundleBuildData;
             if (File.Exists(localAssetBundleVersionPath) == false)
             {
                 assetBundleBuildData = new AssetBundleBuildData();
                 assetBundleBuildData.AssetBundleDatas = new AssetBundleData[0];
+                assetBundleBuildData.AssetBundleVersion = new AssetBundleVersion();
             }
             else
             {
                 string json = File.ReadAllText(localAssetBundleVersionPath);
                 assetBundleBuildData = JsonUtility.FromJson<AssetBundleBuildData>(json);
             }
-           
-            HotUpdateServer.GetHotUpdateAssetInfo(assetBundleBuildData,Application.platform);
-        }
 
-        public void HotUpedateAsset()
-        {
-            var remoteResVersion = 1;
-            var localResVersion = 0;
-            HasNewVersionRes = remoteResVersion > localResVersion;
+            long updateSize = HotUpdateServer.I.GetHotUpdateAssetInfo(assetBundleBuildData, Application.platform);
 
-            if (HasNewVersionRes)
+            if (updateSize > 0)
             {
-                UpdateAsset();
-                Debug.Log("Update");
+                longText.gameObject.SetActive(true);
+                longText.text = GetFileSize(updateSize);
             }
-            else
-            {
-                Debug.Log("Not Update");
-            }
-
         }
-
         public void UpdateAsset()
         {
+            longText.gameObject.SetActive(false);
             // 下载需要更新的资源
 
             // 替换本地资源
-
-
         }
 
         private void Start()
         {
 
         }
+
+        private const float OneKB = 1024;
+        private const float OneMB = 1048576;      // System.Math.Pow(OneKB, 2);
+        private const float OneGB = 1073741824;   // System.Math.Pow(OneKB, 3);
+        private const float OneTB = 1099511627776;// System.Math.Pow(OneKB, 4);
+        /// <summary>
+        /// 计算文件大小函数(保留两位小数),Size为字节大小
+        /// </summary>
+        /// <param name="size">初始文件大小</param>
+        /// <returns></returns>
+        public static string GetFileSize(long size)
+        {
+            if (size < OneKB) return size + "B";
+            if (size < OneMB) return (size / OneKB).ToString("f2") + "K";
+            if (size < OneGB) return (size / OneMB).ToString("f2") + "M";
+            if (size < OneTB) return (size / OneGB).ToString("f2") + "G";
+
+            return (size / OneTB).ToString("f2") + "T";
+        }
     }
+
     /*
     打包
     build ab 
