@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +9,7 @@ namespace Cofdream.AssetBuild
     public class AssetBundleBuildData
     {
         public AssetBundleData[] AssetBundleDatas;
-        public AssetBundleVersion AssetBundleVersion;
+        public BuildVersion AssetBundleVersion;
     }
 
     [System.Serializable]
@@ -22,7 +22,7 @@ namespace Cofdream.AssetBuild
     }
 
     [System.Serializable]
-    public class AssetBundleVersion
+    public class BuildVersion
     {
         public uint version;
 
@@ -31,7 +31,7 @@ namespace Cofdream.AssetBuild
             version++;
         }
 
-        public int CompareTo(AssetBundleVersion assetBuildVersion)
+        public int CompareTo(BuildVersion assetBuildVersion)
         {
             return version.CompareTo(assetBuildVersion.version);
         }

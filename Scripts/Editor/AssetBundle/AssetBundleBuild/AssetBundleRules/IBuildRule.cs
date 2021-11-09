@@ -1,6 +1,6 @@
-using UnityEditor;
+﻿using UnityEditor;
 
-namespace CofdreamEditor.AssetBundle
+namespace Cofdream.AssetEditor
 {
     public delegate void CreateCallback(AssetBundleBuild assetBundleBuild);
     public interface IBuildRule

@@ -1,6 +1,6 @@
 {
-    "name": "Cofdream.AssetLoad",
-    "rootNamespace": "Cofdream.AssetLoad",
+    "name": "Cofdream.Asset",
+    "rootNamespace": "Cofdream.Asset",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -24,7 +24,7 @@ namespace Cofdream
             {
                 assetBundleBuildData = new AssetBundleBuildData();
                 assetBundleBuildData.AssetBundleDatas = new AssetBundleData[0];
-                assetBundleBuildData.AssetBundleVersion = new AssetBundleVersion();
+                assetBundleBuildData.AssetBundleVersion = new BuildVersion();
             }
             else
             {

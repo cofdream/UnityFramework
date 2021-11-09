@@ -1,9 +1,9 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace CofdreamEditor.AssetBundle
+namespace Cofdream.AssetEditor
 {
     public class BuildRule : ScriptableObject, IBuildRule
     {
