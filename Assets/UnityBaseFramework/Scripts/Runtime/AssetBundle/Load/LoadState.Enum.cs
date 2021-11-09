@@ -1,5 +1,5 @@
-
-namespace Cofdream.AssetLoad
+﻿
+namespace Cofdream.Asset
 {
     public enum LoadState : byte
     {

@@ -1,6 +1,4 @@
-//using Cofdream.AssetLoad;
-using Cofdream;
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -57,9 +55,9 @@ public class TestLoad : MonoBehaviour
     private const float OneGB = 1073741824;   // System.Math.Pow(OneKB, 3);
     private const float OneTB = 1099511627776;// System.Math.Pow(OneKB, 4);
     /// <summary>
-    /// ¼ÆËãÎÄ¼ş´óĞ¡º¯Êı(±£ÁôÁ½Î»Ğ¡Êı),SizeÎª×Ö½Ú´óĞ¡
+    /// è®¡ç®—æ–‡ä»¶å¤§å°å‡½æ•°(ä¿ç•™ä¸¤ä½å°æ•°),Sizeä¸ºå­—èŠ‚å¤§å°
     /// </summary>
-    /// <param name="size">³õÊ¼ÎÄ¼ş´óĞ¡</param>
+    /// <param name="size">åˆå§‹æ–‡ä»¶å¤§å°</param>
     /// <returns></returns>
     public static string GetFileSize(long size)
     {

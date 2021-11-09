@@ -1,9 +1,9 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace CofdreamEditor.AssetBundle
+namespace Cofdream.AssetEditor
 {
     public sealed class FolderBuildRule : ScriptableObject, IBuildRule
     {
@@ -27,7 +27,7 @@ namespace CofdreamEditor.AssetBundle
                 string path = AssetDatabase.GetAssetPath(AssetFolder);
                 if (AssetDatabase.IsValidFolder(path) == false)
                 {
-                    EditorUtility.DisplayDialog("¾¯¸æ", "²»ÊÇÎÄ¼ş¼ĞÂ·¾¶", "È·ÈÏ");
+                    EditorUtility.DisplayDialog("è­¦å‘Š", "ä¸æ˜¯æ–‡ä»¶å¤¹è·¯å¾„", "ç¡®è®¤");
                 }
             }
         }

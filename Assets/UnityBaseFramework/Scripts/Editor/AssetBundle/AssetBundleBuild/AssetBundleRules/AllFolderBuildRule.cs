@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-namespace CofdreamEditor.AssetBundle
+namespace Cofdream.AssetEditor
 {
     public sealed class AllFolderBuildRule : ScriptableObject, IBuildRule
     {

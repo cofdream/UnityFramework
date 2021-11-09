@@ -1,15 +1,9 @@
 {
-  "name": "com.cofdream.unitybaseframework",
+  "name": "com.cofdream.asset",
   "version": "0.0.1",
-  "displayName": "BaseFramework",
+  "displayName": "CAsset",
   "description": "",
   "unity": "2019.1",
   "dependencies": {
-    "com.cofdream.toolkit": "https://github.com/cofdream/DATools.git#upm"
-  },
-  "author": {
-    "name": "Cofdream",
-    "email": "cofdream@sina.com",
-    "url": "https://github.com/cofdream/UnityBaseFramework.git"
   }
 }
