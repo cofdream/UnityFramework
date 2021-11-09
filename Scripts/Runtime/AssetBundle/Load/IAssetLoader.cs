@@ -1,15 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Cofdream.Asset
 {
     public interface IAssetLoader
     {
-        public delegate void AssetLoaded(Object obj);
-
-        public Object Load(string assetName, System.Type type);
-        public void LoadAsync(string assetName, AssetLoaded assetLoaded);
-        public void UnloadAllLoadedObjects();
+        Object Load(string assetName, System.Type type);
+        void LoadAsync(UnityAction<IAssetLoader> loaded);
+        void UnloadAllLoadedObjects();
     }
 }

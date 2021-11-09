@@ -7,6 +7,5 @@ namespace Cofdream.Asset
         Loading = 1,
         Loaded = 2,
         Unload = 3,
-        LoadError = 4,
     }
 }
