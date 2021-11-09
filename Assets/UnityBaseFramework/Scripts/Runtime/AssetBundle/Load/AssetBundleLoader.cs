@@ -7,9 +7,6 @@ namespace Cofdream.Asset
 {
     public class AssetBundleLoader : IAssetLoader
     {
-        //private delegate void LoadedCallBack();
-        private delegate Object LoadedCallBack();
-
         private uint referenceCount;
         private LoadState loadState;
         private string assetBundleName;
@@ -19,10 +16,8 @@ namespace Cofdream.Asset
 
         private AssetBundleCreateRequest assetBundleCreateRequest;
         private ushort dependLoadedCount;
-        private UnityAction dependLoadedCallBack;
-
-        private LoadedCallBack loadedCallBack;
-
+        private UnityAction<IAssetLoader> cacheLoaded;
+        private UnityAction cacheDependLoaded;
 
         private Dictionary<string, Object> loadedObjects;
 
@@ -70,97 +65,62 @@ namespace Cofdream.Asset
             }
         }
 
-        public static void Put(AssetBundleLoader assetBundleLoad)
+
+        public Object Load(string assetName, System.Type type)
         {
-            if (assetBundleLoad.referenceCount == 1)
+            LoadAssetBundle();
+            if (assetBundle == null)
             {
-                assetBundleLoad.referenceCount = 0;
-
-                foreach (var assetBundleLoadDeoend in assetBundleLoad.assetBundleLoadDependencies)
-                {
-                    Put(assetBundleLoadDeoend);
-                }
-
-                assetBundleLoad.loadState = LoadState.Unload;
-                assetBundleLoad.assetBundle.Unload(true);
-                assetBundleLoad.assetBundle = null;
-                assetBundleLoad.loadedObjects.Clear();
+                return null;
             }
-            else
-            {
-                assetBundleLoad.referenceCount--;
-            }
+            return LoadAsset(assetName, type);
         }
-
-
-        private void Load()
+        private void LoadAssetBundle()
         {
             switch (loadState)
             {
                 case LoadState.NotLoad:
                 case LoadState.Unload:
 
-                    //todo cache
-                    var assetBundleMain = AssetBundle.LoadFromFile(rootPath + folderName);
-                    var assetBundleManifest = assetBundleMain.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
-
-                    var dependencies = assetBundleManifest.GetAllDependencies(assetBundleName);
-                    if (dependencies.Length > 0)
-                    {
-                        assetBundleLoadDependencies = new AssetBundleLoader[dependencies.Length];
-                    }
-                    for (int i = 0; i < dependencies.Length; i++)
-                    {
-                        var assetBundleLoad = GetLoader(dependencies[i]);
-                        assetBundleLoad.Load();
-                        assetBundleLoadDependencies[i] = assetBundleLoad;
-                    }
-
-                    assetBundleMain.Unload(true);
+                    loadState = LoadState.Loading;
 
                     assetBundle = AssetBundle.LoadFromFile(rootPath + assetBundleName);
 
-                    if (assetBundle == null)
+                    //todo cache
+                    var assetBundleMain = AssetBundle.LoadFromFile(rootPath + folderName);
+                    var assetBundleManifest = assetBundleMain.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
+                    var dependencies = assetBundleManifest.GetAllDependencies(assetBundleName);
+                    assetBundleMain.Unload(true);
+
+                    // 加载依赖
+                    dependLoadedCount = (ushort)dependencies.Length;
+                    if (dependLoadedCount > 0)
                     {
-                        loadState = LoadState.LoadError;
+                        assetBundleLoadDependencies = new AssetBundleLoader[dependLoadedCount];
+
+                        for (int i = 0; i < dependLoadedCount; i++)
+                        {
+                            var assetBundleLoad = GetLoader(dependencies[i]);
+                            assetBundleLoad.LoadAssetBundle();
+                            assetBundleLoadDependencies[i] = assetBundleLoad;
+                        }
+
+                        dependLoadedCount = 0;
                     }
-                    else
-                    {
-                        loadState = LoadState.Loaded;
-                    }
+
+                    loadState = LoadState.Loaded;
 
                     break;
                 case LoadState.Loading:
-                    // todo 同步加载的ab/依赖ab 再加载中
-                    Debug.LogError("同步加载的ab/依赖ab 再加载中");
+                    Debug.LogError("资源已经在异步加载中，无法同步加载出数据。请检查依赖文件或加载函数。");
                     break;
                 case LoadState.Loaded:
                     break;
-                case LoadState.LoadError:
-                    break;
             }
         }
-        public Object Load(string assetName, System.Type type)
-        {
-            Load();
 
-            if (loadedObjects.TryGetValue(assetName, out Object asset) == false)
-            {
-                asset = assetBundle.LoadAsset(assetName, type);
-                loadedObjects.Add(assetName, asset);
-            }
-            return asset;
-        }
 
-        public static void Test()
-        {
-            //模拟外部加载
-            var assetBundleLoader = GetLoader("AB包名字");
-
-            assetBundleLoader.LoadAsync("资源名字", null);
-        }
-
-        public void LoadAsync(LoadedCallBack loadedCallBack)
+        public void LoadAsync(UnityAction<IAssetLoader> loaded)
         {
             switch (loadState)
             {
@@ -170,82 +130,200 @@ namespace Cofdream.Asset
                     loadState = LoadState.Loading;
 
                     assetBundleCreateRequest = AssetBundle.LoadFromFileAsync(rootPath + assetBundleName);
-                    assetBundleCreateRequest.completed += Loaded;
+                    assetBundleCreateRequest.completed += AssetBundleLoadedCallback;
 
                     //todo cache
                     var assetBundleMain = AssetBundle.LoadFromFile(rootPath + folderName);
                     var assetBundleManifest = assetBundleMain.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
-
                     var dependencies = assetBundleManifest.GetAllDependencies(assetBundleName);
-                    dependLoadedCount = (ushort)dependencies.Length;
-                    for (int i = 0; i < dependLoadedCount; i++)
-                    {
-                        var assetBundleLoad = GetLoader(dependencies[i]);
-                        assetBundleLoad.LoadAsync(DependLoaded);
-                        assetBundleLoadDependencies[i] = assetBundleLoad;
-                    }
-
                     assetBundleMain.Unload(true);
+
+                    //异步加载依赖
+                    dependLoadedCount = (ushort)dependencies.Length;
+                    if (dependLoadedCount > 0)
+                    {
+                        assetBundleLoadDependencies = new AssetBundleLoader[dependLoadedCount];
+                        for (int i = 0; i < dependLoadedCount; i++)
+                        {
+                            var assetBundleLoad = GetLoader(dependencies[i]);
+                            assetBundleLoad.DependLoadAsync(DependLoadedCallback);
+                            assetBundleLoadDependencies[i] = assetBundleLoad;
+                        }
+                    }
 
                     break;
                 case LoadState.Loading:
-                    dependLoadedCallBack += dependLoaded;
+
+                    if (loaded != null)
+                    {
+                        // 保存需要回调的事件
+                        cacheLoaded += loaded;
+                    }
+
                     break;
                 case LoadState.Loaded:
-                    dependLoaded?.Invoke();
-                    break;
-                case LoadState.LoadError:
+
+                    //处理缓存的回调事件
+                    if (cacheLoaded != null)
+                    {
+                        cacheLoaded.Invoke(this);
+                        cacheLoaded = null;
+                    }
+
                     break;
             }
         }
+        
+        private void DependLoadAsync(UnityAction dependLoaded)
+        {
+            switch (loadState)
+            {
+                case LoadState.NotLoad:
+                case LoadState.Unload:
 
-        public void o
+                    loadState = LoadState.Loading;
 
-        private void Loaded(AsyncOperation asyncOperation)
+                    assetBundleCreateRequest = AssetBundle.LoadFromFileAsync(rootPath + assetBundleName);
+                    assetBundleCreateRequest.completed += DependLoadedCallback;
+
+                    //todo cache
+                    var assetBundleMain = AssetBundle.LoadFromFile(rootPath + folderName);
+                    var assetBundleManifest = assetBundleMain.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
+                    var dependencies = assetBundleManifest.GetAllDependencies(assetBundleName);
+                    assetBundleMain.Unload(true);
+
+                    //异步加载依赖
+                    dependLoadedCount = (ushort)dependencies.Length;
+                    if (dependLoadedCount > 0)
+                    {
+                        assetBundleLoadDependencies = new AssetBundleLoader[dependLoadedCount];
+                        for (int i = 0; i < dependLoadedCount; i++)
+                        {
+                            var assetBundleLoad = GetLoader(dependencies[i]);
+                            assetBundleLoad.DependLoadAsync(DependLoadedCallback);
+                            assetBundleLoadDependencies[i] = assetBundleLoad;
+                        }
+                    }
+
+                    break;
+                case LoadState.Loading:
+
+                    // 保存依赖加载完的回调的事件
+                    cacheDependLoaded += dependLoaded;
+
+                    break;
+                case LoadState.Loaded:
+
+                    dependLoaded?.Invoke();
+
+                    break;
+            }
+        }
+        private void AssetBundleLoadedCallback(AsyncOperation asyncOperation)
         {
             if (asyncOperation.isDone)
             {
-                //依赖先加载完成
+                //依赖已加载完成
                 if (dependLoadedCount == 0)
                 {
-                    Loaded();
+                    if (loadState == LoadState.Loading)
+                    {
+                        assetBundle = assetBundleCreateRequest.assetBundle;
+                        loadState = LoadState.Loaded;
+                    }
+                    else
+                    {
+                        Debug.LogError($"加载状态异常，请检查整个加载流程。loadState {loadState}");
+                    }
                 }
             }
         }
+        private void DependLoadedCallback(AsyncOperation asyncOperation)
+        {
+            if (asyncOperation.isDone)
+            {
+                //依赖已加载完成
+                if (dependLoadedCount == 0)
+                {
+                    //把缓存的回调都清除
+                    if (cacheDependLoaded != null)
+                    {
+                        cacheDependLoaded?.Invoke();
+                        cacheDependLoaded = null;
+                    }
 
-        private Object DependLoaded(System.Type type)
+                    if (loadState == LoadState.Loading)
+                    {
+                        assetBundle = assetBundleCreateRequest.assetBundle;
+                        loadState = LoadState.Loaded;
+                    }
+                    else
+                    {
+                        Debug.LogError($"加载状态异常，请检查整个加载流程。loadState {loadState}");
+                    }
+                }
+            }
+        }
+        private void DependLoadedCallback()
         {
             dependLoadedCount--;
             if (dependLoadedCount == 0)
             {
+                //本体已加载完成
                 if (assetBundleCreateRequest.isDone)
                 {
-                    //本体先加载完成
-                    Loaded();
+                    //把缓存的回调都清除
+                    if (cacheDependLoaded != null)
+                    {
+                        cacheDependLoaded?.Invoke();
+                        cacheDependLoaded = null;
+                    }
+
+                    if (loadState == LoadState.Loading)
+                    {
+                        assetBundle = assetBundleCreateRequest.assetBundle;
+                        loadState = LoadState.Loaded;
+                    }
+                    else
+                    {
+                        Debug.LogError($"加载状态异常，请检查整个加载流程。loadState {loadState}");
+                    }
                 }
             }
         }
 
-        private void Loaded()
-        {
-            if (LoadState == LoadState.Loading)
-            {
-                dependLoadedCallBack?.Invoke();
-                dependLoadedCallBack = null;
-
-            }
-            else
-                Debug.LogError($"加载状态异常，请检查整个加载流程。loadState {loadState}");
-        }
 
         public void UnloadAllLoadedObjects()
         {
-            Put(this);
+            if (referenceCount == 1)
+            {
+                referenceCount = 0;
+
+                foreach (var assetBundleLoadDepend in assetBundleLoadDependencies)
+                {
+                    assetBundleLoadDepend.UnloadAllLoadedObjects();
+                }
+
+                loadState = LoadState.Unload;
+                assetBundle.Unload(true);
+                assetBundle = null;
+                loadedObjects.Clear();
+            }
+            else
+            {
+                referenceCount--;
+            }
         }
 
-        public void LoadAsync()
+
+        private Object LoadAsset(string assetName, System.Type type)
         {
-            throw new System.NotImplementedException();
+            if (loadedObjects.TryGetValue(assetName, out Object asset) == false)
+            {
+                asset = assetBundle.LoadAsset(assetName, type);
+                loadedObjects.Add(assetName, asset);
+            }
+            return asset;
         }
     }
 }
