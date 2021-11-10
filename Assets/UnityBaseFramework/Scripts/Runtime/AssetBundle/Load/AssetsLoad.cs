@@ -27,7 +27,7 @@ namespace Cofdream.Asset
             return assetLoad.Load(assetName, type);
         }
 
-        public static void UnLoad(this IAssetLoader assetLoad)
+        public static void UnloadAllLoadedObjects(this IAssetLoader assetLoad)
         {
             assetLoad.UnloadAllLoadedObjects();
         }
