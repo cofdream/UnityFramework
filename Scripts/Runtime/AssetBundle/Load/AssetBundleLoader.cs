@@ -173,7 +173,7 @@ namespace Cofdream.Asset
                     break;
             }
         }
-        
+
         private void DependLoadAsync(UnityAction dependLoaded)
         {
             switch (loadState)
@@ -299,9 +299,12 @@ namespace Cofdream.Asset
             {
                 referenceCount = 0;
 
-                foreach (var assetBundleLoadDepend in assetBundleLoadDependencies)
+                if (assetBundleLoadDependencies != null)
                 {
-                    assetBundleLoadDepend.UnloadAllLoadedObjects();
+                    foreach (var assetBundleLoadDepend in assetBundleLoadDependencies)
+                    {
+                        assetBundleLoadDepend.UnloadAllLoadedObjects();
+                    }
                 }
 
                 loadState = LoadState.Unload;
