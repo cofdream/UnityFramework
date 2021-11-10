@@ -9,7 +9,7 @@ namespace Cofdream.Asset
         public static IAssetLoader GetAssetLoad(string assetBundleName)
         {
 #if UNITY_EDITOR
-            if (EditorAssetLoader.AssetBundleLoad)
+            if (EditorAssetLoader.AssetBundleLoad == false)
             {
                 return EditorAssetLoader.GetLoader(assetBundleName);
             }
