@@ -12,7 +12,7 @@ namespace Cofdream.Asset
     {
         public static bool AssetBundleLoad { get; private set; }
 
-        private const bool DefaultValue = true;
+        private const bool DefaultValue = false;
         private const string LOCAL_LOAD_MODEL = "EditorAssetLoad.AssetBundleLoad";
         private const string MENI_ITEM_NAME = "CAsset/AssetBundleLoad";
         private const int priority = int.MaxValue;
