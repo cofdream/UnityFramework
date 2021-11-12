@@ -5,7 +5,10 @@ using UnityEngine;
 
 namespace Cofdream.AssetEditor
 {
-    public class BuildRule : ScriptableObject, IBuildRule
+    /// <summary>
+    /// 自定义打AB包，内容自选。
+    /// </summary>
+    public class CustomBuildRule : ScriptableObject, IBuildRule
     {
         public string AssetBundleName;
         public string[] AssetNames;
