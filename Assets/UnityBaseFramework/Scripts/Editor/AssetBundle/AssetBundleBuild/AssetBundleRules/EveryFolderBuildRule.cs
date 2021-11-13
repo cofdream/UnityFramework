@@ -8,7 +8,7 @@ namespace Cofdream.AssetEditor
     /// </summary>
     public sealed class EveryFolderBuildRule : ScriptableObject, IBuildRule
     {
-        public Object AssetFolder;
+        public DefaultAsset AssetFolder;
 
         public void CreateAssetBundleBuild(CreateCallback createCallback)
         {
@@ -18,10 +18,11 @@ namespace Cofdream.AssetEditor
 
             for (int i = 0; i < folders.Length; i++)
             {
+                string folder = folders[i];
                 createCallback(new AssetBundleBuild()
                 {
-                    assetBundleName = BuildRuleUtil.PathToAssetBundleName(folders[i]),
-                    assetNames = new string[] { folders[i] },
+                    assetBundleName = folder.Replace('/','_'),
+                    assetNames = new string[] { folder },
                 });
             }
         }

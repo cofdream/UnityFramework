@@ -9,7 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2976326d8136f124ea517cbbc3a3d487, type: 3}
+  m_Script: {fileID: 11500000, guid: 4a397d87f1dfa3c4782ef62f704a8d80, type: 3}
   m_Name: HeadIcon
   m_EditorClassIdentifier: 
-  AssetFolder: {fileID: 102900000, guid: b115f5c4e94e3724583dc493f75866ba, type: 3}
+  asset: {fileID: 102900000, guid: b115f5c4e94e3724583dc493f75866ba, type: 3}
+  assetBundleName: Assets_Resource_HeadIcon
