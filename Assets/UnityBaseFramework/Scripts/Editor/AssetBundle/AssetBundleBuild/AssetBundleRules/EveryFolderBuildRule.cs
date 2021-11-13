@@ -1,11 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEngine;
 using UnityEditor;
-using UnityEngine;
 
 namespace Cofdream.AssetEditor
 {
-    public sealed class FolderBuildRule : ScriptableObject, IBuildRule
+    /// <summary>
+    /// 目录下全部文件夹打单独AB包（只打包文件夹）
+    /// </summary>
+    public sealed class EveryFolderBuildRule : ScriptableObject, IBuildRule
     {
         public Object AssetFolder;
 
@@ -13,13 +14,17 @@ namespace Cofdream.AssetEditor
         {
             string path = AssetDatabase.GetAssetPath(AssetFolder);
 
-            createCallback(new AssetBundleBuild()
-            {
-                assetBundleName = BuildRuleUtil.PathToAssetBundleName(path),
-                assetNames = new string[] { path },
-            });
-        }
+            var folders = AssetDatabase.GetSubFolders(path);
 
+            for (int i = 0; i < folders.Length; i++)
+            {
+                createCallback(new AssetBundleBuild()
+                {
+                    assetBundleName = BuildRuleUtil.PathToAssetBundleName(folders[i]),
+                    assetNames = new string[] { folders[i] },
+                });
+            }
+        }
         private void OnValidate()
         {
             if (AssetFolder != null)

@@ -3,7 +3,10 @@ using UnityEditor;
 
 namespace Cofdream.AssetEditor
 {
-    public sealed class AllFolderBuildRule : ScriptableObject, IBuildRule
+    /// <summary>
+    /// 每个资源文件都打单独AB包
+    /// </summary>
+    public class EveryAssetBuildRule : ScriptableObject, IBuildRule
     {
         public Object AssetFolder;
 
