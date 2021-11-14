@@ -17,7 +17,9 @@ namespace Cofdream.Asset
         private const string MENI_ITEM_NAME = "CAsset/AssetBundleLoad";
         private const int priority = int.MaxValue;
 
-        static EditorAssetLoader()
+        [RuntimeInitializeOnLoadMethod]
+        [SuppressMessage("CodeQuality", "IDE0051:删除未使用的私有成员", Justification = "<挂起>")]
+        private static void Initialize()
         {
             AssetBundleLoad = EditorPrefs.GetBool(LOCAL_LOAD_MODEL, DefaultValue);
         }
