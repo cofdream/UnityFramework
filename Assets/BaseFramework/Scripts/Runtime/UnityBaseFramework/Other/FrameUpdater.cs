@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Cofdream.BaseFramework.UnityEngine
+namespace Cofdream.BaseFramework.Other
 {
     /// <summary>
     /// 使用unity函数来更新

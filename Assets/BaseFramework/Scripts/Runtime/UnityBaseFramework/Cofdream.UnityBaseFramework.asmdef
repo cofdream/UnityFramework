@@ -1,6 +1,6 @@
 {
-    "name": "Cofdream.BaseFramework.UnityEngine",
-    "rootNamespace": "Cofdream.BaseFramework.UnityEngine",
+    "name": "Cofdream.UnityBaseFramework",
+    "rootNamespace": "Cofdream.UnityBaseFramework",
     "references": [
         "GUID:ec58530054224fa4f926ca0d01675a23"
     ],
