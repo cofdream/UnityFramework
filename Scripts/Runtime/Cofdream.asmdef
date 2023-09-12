@@ -1,0 +1,16 @@
+{
+    "name": "Cofdream",
+    "rootNamespace": "Cofdream",
+    "references": [
+        "GUID:ec58530054224fa4f926ca0d01675a23"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
