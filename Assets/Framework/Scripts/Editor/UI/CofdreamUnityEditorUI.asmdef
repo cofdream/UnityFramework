@@ -1,0 +1,18 @@
+{
+    "name": "CofdreamUnityEditorUI",
+    "rootNamespace": "Cofdream.UnityEditor.UI",
+    "references": [
+        "GUID:cdcec9d90e0639f4bac16601dc92123e"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

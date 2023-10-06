@@ -1,8 +1,8 @@
 ﻿using UnityEditor;
 using UnityEditor.UI;
-using Cofdream.UnityBaseFramework.UI;
+using Cofdream.UI;
 
-namespace Cofdream.UnityBaseFramework.Editor.UI
+namespace Cofdream.UnityEditor.UI
 {
     [CanEditMultipleObjects, CustomEditor(typeof(NonDrawingGraphic), false)]
     internal sealed class NonDrawingGraphicInspector : GraphicEditor

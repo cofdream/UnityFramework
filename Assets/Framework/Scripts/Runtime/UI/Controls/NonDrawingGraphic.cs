@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace Cofdream.UnityBaseFramework.UI
+namespace Cofdream.UI
 {
 
     [RequireComponent(typeof(CanvasRenderer))]
