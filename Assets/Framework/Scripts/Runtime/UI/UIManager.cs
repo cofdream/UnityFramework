@@ -9,10 +9,23 @@ namespace Cofdream.UI
     {
         public static UILayers UILayers;
 
-        
+     
         public static void Init()
         {
             Debug.Log(UILayers);
+        }
+
+        public static GameObject OpenPanel(GameObject panel)
+        {
+            var obj = Object.Instantiate(panel, UILayers.Default);
+            //obj.transform.localPosition = Vector3.zero;
+
+            return obj;
+        }
+
+        public static void ClosePanel(GameObject mainPanel)
+        {
+            Object.Destroy(mainPanel);
         }
     }
 }

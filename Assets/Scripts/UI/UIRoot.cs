@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public class UIRoot : MonoBehaviour
 {
@@ -41,14 +42,7 @@ public class UIRoot : MonoBehaviour
         }
     }
 
-#endif
-
-    private void Awake()
-    {
-
-    }
-
-    void Start()
+    private static void StaticStart()
     {
         //SceneManager.LoadScene("UI", LoadSceneMode.Additive);
 
@@ -56,14 +50,47 @@ public class UIRoot : MonoBehaviour
         asyncOperation.completed += OnLoadScene;
     }
 
-    private void OnLoadScene(AsyncOperation operation)
+    private static void OnLoadScene(AsyncOperation operation)
     {
         if (operation.isDone == false)
             return;
-
-        UIManager.Init();
     }
 
+#endif
 
+
+    public GameObject MainPanel;
+
+    private List<GameObject> panels = new List<GameObject>();
+
+    private void Awake()
+    {
+
+    }
+
+    private void Start()
+    {
+        StaticStart();
+
+        UIManager.Init();
+
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            panels.Add(UIManager.OpenPanel(MainPanel));
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            foreach (var panel in panels)
+            {
+                UIManager.ClosePanel(panel);
+            }
+            panels.Clear();
+        }
+    }
 
 }
